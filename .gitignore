@@ -4,7 +4,13 @@ package-lock.json
 yarn.lock
 !/yarn.lock
 test/node_modules
+public/images*
 .env
+build
+.cache/**
+.cache*
+*.cache
+index.js
 
 # logs & pids
 *.log
