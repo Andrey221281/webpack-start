@@ -1,0 +1,141 @@
+@import 'tailwindcss/base';
+@import 'tailwindcss/components';
+@import 'tailwindcss/utilities';
+
+@layer base {
+  @font-face {
+    font-family: Nunito;
+    font-weight: 300;
+    src: url('../fonts/nunito/nunito-v15-cyrillic-300.woff2') format('woff2'),
+      url('../fonts/nunito/nunito-v15-cyrillic-300.woff') format('woff'),
+      url('../fonts/nunito/nunito-v15-cyrillic-300.ttf') format('truetype');
+  }
+  /* nunito-regular - cyrillic */
+  @font-face {
+    font-family: Nunito;
+    font-weight: 400;
+    src: url('../fonts/nunito/nunito-v15-cyrillic-regular.woff2')
+        format('woff2'),
+      url('../fonts/nunito/nunito-v15-cyrillic-regular.woff') format('woff'),
+      url('../fonts/nunito/nunito-v15-cyrillic-regular.ttf') format('truetype');
+  }
+
+  * {
+    @apply font-normal;
+  }
+  h1,
+  h2,
+  h3,
+  h4 {
+    @apply font-light;
+  }
+  h1 {
+    @apply text-4xl;
+  }
+  h2 {
+    @apply text-3xl;
+  }
+  h3 {
+    @apply text-2xl;
+  }
+  h4 {
+    @apply text-xl;
+  }
+  p {
+    @apply m-5;
+  }
+  .secondary {
+    @apply text-gray-500;
+  }
+  .success {
+    @apply text-green-500;
+  }
+  .warning {
+    @apply text-yellow-500;
+  }
+  .danger {
+    @apply text-red-500;
+  }
+  .strong {
+    @apply font-semibold;
+  }
+  .disabled {
+    @apply text-gray-400 cursor-not-allowed select-none;
+  }
+  a {
+    @apply text-gray-900 duration-150;
+  }
+  a:hover {
+    @apply text-gray-500;
+  }
+  a.link {
+    @apply text-miro-blue duration-150;
+  }
+  a.link:hover {
+    @apply text-miro-blue-light;
+  }
+  .card {
+    @apply bg-white rounded border border-gray-200;
+  }
+  .card__header {
+    @apply bg-gray-50 text-base font-semibold py-3 px-6 border-b m-0 border-gray-200;
+  }
+  .card__footer {
+    @apply py-2 px-6 border-t border-gray-200;
+  }
+  .card__title {
+    @apply py-5 px-6;
+  }
+  .card__footer__meta {
+    @apply grid grid-cols-3 divide-x divide-gray-200 py-2 px-6 border-t border-gray-200;
+  }
+  .btn {
+    @apply focus:outline-none rounded-sm px-5 py-2 duration-150 border;
+  }
+  .btn-default {
+    @apply border-gray-200;
+  }
+  .btn-default:active {
+    @apply bg-miro-blue text-white !important;
+  }
+  .btn-default:hover {
+    @apply text-miro-blue border-miro-blue;
+  }
+  .btn-danger {
+    @apply text-white border-red-500 bg-red-500;
+  }
+  .btn-danger:active {
+    @apply bg-red-900 !important;
+  }
+  .btn-danger:hover {
+    @apply bg-red-400;
+  }
+  .btn-primary {
+    @apply text-white bg-miro-blue;
+  }
+  .btn-primary:active {
+    @apply bg-miro-blue-dark text-white !important;
+  }
+  .btn-primary:hover {
+    @apply bg-miro-blue-light;
+  }
+  button.loading {
+    @apply bg-miro-blue-light cursor-not-allowed;
+  }
+  .avatar {
+    @apply border uppercase border-miro-blue-dark bg-miro-blue text-white rounded-full w-10 h-10 flex justify-center items-center;
+  }
+  .avatar-large {
+    @apply avatar w-12 h-12;
+  }
+  .badge {
+    @apply relative;
+  }
+  .badge__fill {
+    @apply absolute flex justify-center z-10 items-center w-5 h-5 bg-red-500 text-white rounded-full p-2 text-xs -top-1.5 -right-1.5;
+  }
+  input,
+  textarea {
+    @apply border border-gray-200 rounded-sm inline-block px-5 py-2 text-gray-500 bg-white w-full;
+  }
+}
