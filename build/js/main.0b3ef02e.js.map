@@ -1,1 +1,0 @@
-{"version":3,"sources":["webpack://webpack-start/./src/js/app.js"],"names":["console","log"],"mappings":";yBAGAA,QAAQC,IAAI,U","file":"js/main.0b3ef02e.js","sourcesContent":["import app from './app'\n\n// app()\nconsole.log('1sdsds')\n"],"sourceRoot":""}
