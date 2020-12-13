@@ -83,32 +83,21 @@ module.exports = (
         },
         {
           test: /\.svg$/,
-          use: ['@svgr/webpack']
+          use: { loader: require.resolve('@svgr/webpack') }
         },
         {
-          test: /\.(png|jpe?g|gif)$/i,
-          use: [
-            {
-              loader: require.resolve('file-loader'),
-              options: {
-                name: IS_DEV
-                  ? 'images/[name].[ext]'
-                  : 'images/[contenthash].[ext]'
-              }
-            }
-          ]
+          test: /\.(?:ico|gif|png|jpg|jpeg)$/i,
+          type: 'asset/resource'
+          //   generator: {
+          //     filename: 'images/[hash][ext][query]'
+          //   }
         },
         {
-          test: /\.(woff|woff2|eot|ttf|otf)$/i,
-          use: [
-            {
-              loader: require.resolve('file-loader'),
-              options: {
-                name: '[name].[ext]',
-                outputPath: 'fonts/'
-              }
-            }
-          ]
+          test: /\.(woff(2)?|eot|ttf|otf|svg|)$/,
+          type: 'asset/inline'
+          //   generator: {
+          //     filename: 'fonts/[hash][ext][query]'
+          //   }
         },
         {
           test: /\.css$/i,
