@@ -71,8 +71,8 @@ function build(previousFileSizes) {
     // const clientConfig = config('prod')
 
     await config('prod', min).then((clientConfig) => {
-      console.log('Creating an optimized production build...\n')
-      console.log('Compiling...\n\n')
+      console.log('Creating an optimized production build...')
+      console.log('Compiling...')
 
       compile(clientConfig, (err, clientStats) => {
         if (err) {
