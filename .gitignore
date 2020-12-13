@@ -6,8 +6,9 @@ yarn.lock
 test/node_modules
 public/images*
 .env
-build
+build/**
 .cache
+index.js
 
 # logs & pids
 *.log
