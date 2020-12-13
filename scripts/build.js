@@ -1,5 +1,6 @@
 const webpack = require('webpack')
 const fs = require('fs-extra')
+const mri = require('mri')
 const chalk = require('chalk')
 const paths = require('../config/paths')
 const FileSizeReporter = require('razzle-dev-utils/FileSizeReporter')
@@ -19,6 +20,10 @@ process.env.NODE_ENV = 'production'
 process.on('unhandledRejection', (err) => {
   throw err
 })
+
+const argv = process.argv.slice(2)
+const cliArgs = mri(argv)
+const min = cliArgs.min
 
 async function main() {
   measureFileSizesBeforeBuild(paths.appBuild)
@@ -65,7 +70,7 @@ function build(previousFileSizes) {
   return new Promise(async (resolve, reject) => {
     // const clientConfig = config('prod')
 
-    await config('prod').then((clientConfig) => {
+    await config('prod', min).then((clientConfig) => {
       console.log('Creating an optimized production build...\n')
       console.log('Compiling...\n\n')
 

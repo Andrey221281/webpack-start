@@ -10,9 +10,14 @@ const HtmlWebpackHarddiskPlugin = require('html-webpack-harddisk-plugin')
 const FriendlyErrorsWebpackPlugin = require('friendly-errors-webpack-plugin')
 // const FaviconsWebpackPlugin = require('favicons-webpack-plugin')
 // const CopyPlugin = require('copy-webpack-plugin')
+const TerserPlugin = require('terser-webpack-plugin')
+const CssMinimizerPlugin = require('css-minimizer-webpack-plugin')
+// const safePostCssParser = require('postcss-safe-parser')
+const posthtml = require('posthtml')
 
 const postcssOptions = {
   ident: 'postcss',
+  sourceMap: true,
   plugins: [
     require('tailwindcss'),
     require('postcss-preset-env')({
@@ -27,8 +32,10 @@ const postcssOptions = {
     // })
   ]
 }
+
 module.exports = (
   env = 'dev',
+  min = false,
   clearConsole = true,
   host = 'localhost',
   port = 3000
@@ -86,24 +93,25 @@ module.exports = (
             test: /\.html$/i,
             loader: require.resolve('html-loader'),
             options: {
-              attributes: {
-                list: [
-                  {
-                    tag: 'img',
-                    attribute: 'data-src',
-                    type: 'src'
-                  },
-                  {
-                    tag: 'img',
-                    attribute: 'src',
-                    type: 'src'
-                  },
-                  {
-                    tag: 'img',
-                    attribute: 'data-srcset',
-                    type: 'srcset'
-                  }
-                ]
+              preprocessor: async (content, loaderContext) => {
+                let result
+
+                try {
+                  result = await posthtml()
+                    .use(
+                      require('posthtml-include')({
+                        root: paths.appPublic,
+                        encoding: 'utf-8'
+                      })
+                    )
+                    .process(content, { sync: true })
+                } catch (error) {
+                  await loaderContext.emitError(error)
+
+                  return content
+                }
+
+                return result.html
               }
             }
           },
@@ -240,6 +248,62 @@ module.exports = (
           chunkFilename: 'css/[name].[contenthash:8].chunk.css'
         })
       ]
+    }
+    if (IS_PROD && min) {
+      config.optimization = {
+        splitChunks: {
+          chunks: 'all',
+          cacheGroups: {
+            default: false,
+            vendors: false,
+            // In webpack 5 vendors was renamed to defaultVendors
+            defaultVendors: false,
+            framework: {
+              chunks: 'all',
+              name: 'framework',
+              // This regex ignores nested copies of framework libraries so they're
+              // bundled with their issuer.
+              // https://github.com/vercel/next.js/pull/9012
+              test: /(?<!node_modules.*)[\\/]node_modules[\\/](react|react-dom|scheduler|prop-types|use-subscription)[\\/]/,
+              priority: 40,
+              // Don't let webpack eliminate this chunk (prevents this chunk from
+              // becoming a part of the commons chunk)
+              enforce: true
+            }
+          },
+          maxInitialRequests: 25,
+          minSize: 20000
+        },
+        moduleIds: 'deterministic',
+        minimize: true,
+        minimizer: [
+          new TerserPlugin({
+            terserOptions: {
+              parse: {},
+              ecma: 8,
+              compress: {
+                // ecma: 5,
+                // warnings: false,
+                // comparisons: false,
+                // inline: 2
+              },
+              mangle: true,
+              output: {
+                ecma: 5,
+                comments: false,
+                // Turned on because emoji and regex is not minified properly using default
+                // https://github.com/facebook/create-react-app/issues/2488
+                ascii_only: true
+              },
+              sourceMap: true
+            }
+          }),
+          new CssMinimizerPlugin({
+            parallel: true,
+            sourceMap: true
+          })
+        ]
+      }
     }
 
     resolve(config)
