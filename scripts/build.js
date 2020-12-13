@@ -3,8 +3,9 @@ const fs = require('fs-extra')
 const chalk = require('chalk')
 const paths = require('../config/paths')
 const FileSizeReporter = require('razzle-dev-utils/FileSizeReporter')
-const formatWebpackMessages = require('react-dev-utils/formatWebpackMessages')
-const config = require('../config/createConfig')
+const formatWebpackMessages = require('../config/formatWebpackMessages')
+// const config = require('../config/createConfig')
+const config = require('../config/asyncCreateConfig')
 const printErrors = require('razzle-dev-utils/printErrors')
 // const clearConsole = require( 'react-dev-utils/clearConsole'
 
@@ -25,7 +26,7 @@ async function main() {
       // Remove all content but keep the directory so that
       // if you're in it, you don't end up in Trash
       fs.emptyDirSync(paths.appBuild)
-
+      fs.removeSync(paths.appCache)
       // Start the webpack build
       return build(previousFileSizes)
     })
@@ -60,46 +61,53 @@ async function main() {
 }
 
 function build(previousFileSizes) {
-  return new Promise((resolve, reject) => {
-    const clientConfig = config('prod')
+  // eslint-disable-next-line no-async-promise-executor
+  return new Promise(async (resolve, reject) => {
+    // const clientConfig = config('prod')
+
+    await config('prod').then((clientConfig) => {
+      console.log('Creating an optimized production build...\n')
+      console.log('Compiling...\n\n')
+
+      compile(clientConfig, (err, clientStats) => {
+        if (err) {
+          reject(err)
+        }
+        const clientMessages = formatWebpackMessages(
+          clientStats.toJson({}, true)
+        )
+        if (clientMessages.errors.length) {
+          return reject(new Error(clientMessages.errors.join('\n\n')))
+        }
+        if (
+          !process.env.WARNINGS_ERRORS_DISABLE &&
+          process.env.CI &&
+          (typeof process.env.CI !== 'string' ||
+            process.env.CI.toLowerCase() !== 'false') &&
+          clientMessages.warnings.length
+        ) {
+          console.log(
+            chalk.yellow(
+              '\nTreating warnings as errors because process.env.CI = true.\n' +
+                'Most CI servers set it automatically.\n'
+            )
+          )
+
+          return reject(new Error(clientMessages.warnings.join('\n\n')))
+        }
+
+        // clearConsole()
+        return resolve({
+          stats: clientStats,
+          previousFileSizes,
+          warnings: clientMessages.warnings
+        })
+      })
+    })
 
     // clearConsole()
 
-    console.log('Creating an optimized production build...\n')
-    console.log('Compiling...\n\n')
-
-    compile(clientConfig, (err, clientStats) => {
-      if (err) {
-        reject(err)
-      }
-      const clientMessages = formatWebpackMessages(clientStats.toJson({}, true))
-      if (clientMessages.errors.length) {
-        return reject(new Error(clientMessages.errors.join('\n\n')))
-      }
-      if (
-        !process.env.WARNINGS_ERRORS_DISABLE &&
-        process.env.CI &&
-        (typeof process.env.CI !== 'string' ||
-          process.env.CI.toLowerCase() !== 'false') &&
-        clientMessages.warnings.length
-      ) {
-        console.log(
-          chalk.yellow(
-            '\nTreating warnings as errors because process.env.CI = true.\n' +
-              'Most CI servers set it automatically.\n'
-          )
-        )
-
-        return reject(new Error(clientMessages.warnings.join('\n\n')))
-      }
-
-      // clearConsole()
-      return resolve({
-        stats: clientStats,
-        previousFileSizes,
-        warnings: clientMessages.warnings
-      })
-    })
+    // then
   })
 }
 

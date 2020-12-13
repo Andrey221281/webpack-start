@@ -13,6 +13,8 @@ module.exports = {
   appAssetsManifest: resolveApp('build/assets.json'),
   appFavicon: resolveApp('public/favicon.svg'),
   appImagesSrc: resolveApp('src/images'),
+  appCache: resolveApp('.cache'),
+  appAssetsFolder: resolveApp('build/assets/'),
   appImagesBuild: resolveApp('build/images'),
   appPublicHtmlFile: resolveApp('public/index.html'),
   config: resolveApp('config/createConfig.js'),

@@ -1,25 +1,18 @@
 const paths = require('../config/paths')
 const devServer = require('./devServer')
 const webpack = require('webpack')
-// const dotenv = require('dotenv')
 const getClientEnv = require('../config/env').getClientEnv
-// const { resolve } = require('path')
 const AssetsPlugin = require('assets-webpack-plugin')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const ErrorOverlayPlugin = require('error-overlay-webpack-plugin')
 const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 const HtmlWebpackHarddiskPlugin = require('html-webpack-harddisk-plugin')
-// const clearConsole = require('react-dev-utils/clearConsole')
 const FriendlyErrorsWebpackPlugin = require('friendly-errors-webpack-plugin')
-const FaviconsWebpackPlugin = require('favicons-webpack-plugin')
+// const FaviconsWebpackPlugin = require('favicons-webpack-plugin')
 const CopyPlugin = require('copy-webpack-plugin')
 
 const postcssOptions = {
   ident: 'postcss',
-  sourceMap: true,
-  stats: {
-    errors: true
-  },
   plugins: [
     require('tailwindcss'),
     require('postcss-preset-env')({
@@ -34,7 +27,6 @@ const postcssOptions = {
     // })
   ]
 }
-
 module.exports = (
   env = 'dev',
   clearConsole = true,
@@ -48,12 +40,17 @@ module.exports = (
   const dotenv = getClientEnv('web', { clearConsole, host, port })
 
   const config = {
+    stats: 'none',
+    cache: {
+      type: 'filesystem',
+      cacheDirectory: paths.appCache
+    },
+    infrastructureLogging: {
+      level: 'warn'
+    },
     mode: IS_DEV ? 'development' : 'production',
     devtool: IS_DEV ? 'cheap-module-source-map' : 'source-map',
-    entry: [
-      IS_DEV && 'webpack-hot-middleware/client?reload=true',
-      paths.appSrc
-    ].filter(Boolean),
+    entry: paths.appSrc,
     output: {
       path: paths.appBuild,
       publicPath: '/',
@@ -89,14 +86,14 @@ module.exports = (
           test: /\.(?:ico|gif|png|jpg|jpeg)$/i,
           type: 'asset/resource'
           //   generator: {
-          //     filename: 'images/[hash][ext][query]'
+          //     filename: 'images/[contenthash:8][ext][query]'
           //   }
         },
         {
           test: /\.(woff(2)?|eot|ttf|otf|svg|)$/,
           type: 'asset/inline'
           //   generator: {
-          //     filename: 'fonts/[hash][ext][query]'
+          //     filename: 'fonts/[contenthash:8][ext][query]'
           //   }
         },
         {
@@ -111,7 +108,8 @@ module.exports = (
                     importLoaders: 1,
                     modules: {
                       auto: true,
-                      localIdentName: '[path][name]__[local]--[hash:base64:5]'
+                      localIdentName:
+                        '[path][name]__[local]--[contenthash:base64:5]'
                     }
                   }
                 },
@@ -131,7 +129,7 @@ module.exports = (
                     importLoaders: 1,
                     modules: {
                       auto: true,
-                      localIdentName: '[name]__[local]___[hash:base64:5]'
+                      localIdentName: '[name]__[local]___[contenthash:base64:5]'
                     }
                   }
                 },
@@ -150,22 +148,13 @@ module.exports = (
       new CopyPlugin({
         patterns: [{ from: paths.appImagesSrc, to: paths.appImagesBuild }]
       }),
-      new FriendlyErrorsWebpackPlugin({
-        onErrors: function (severity, errors) {
-          console.log('severity: ', severity)
-          console.log('errors: ', errors)
-        }
-      }),
+
       new AssetsPlugin({
         path: paths.appBuild,
         filename: 'assets.json'
       }),
       //   new webpack.ProgressPlugin(),
       new webpack.DefinePlugin(dotenv.stringified),
-      //   new webpack.DefinePlugin({
-      //     'process.env': JSON.stringify(dotenv.config().parsed)
-      //   }),
-
       new HtmlWebpackPlugin(
         Object.assign(
           {},
@@ -193,14 +182,17 @@ module.exports = (
             : {}
         )
       ),
-      new HtmlWebpackHarddiskPlugin(),
-      new FaviconsWebpackPlugin({
-        logo: paths.appFavicon,
-        favicons: {
-          appName: process.env.APP_NAME || 'my-app',
-          appDescription: process.env.APP_DESCRIPTION || 'My awesome App'
-        }
-      })
+      new HtmlWebpackHarddiskPlugin()
+      // new FaviconsWebpackPlugin({
+      //   logo: paths.appFavicon,
+      //   favicons: {
+      //     cache: true,
+      //     publicPath: paths.appPublic,
+      //     prefix: 'assets/'
+      //     // appName: process.env.APP_NAME || 'my-app'
+      //     // appDescription: process.env.APP_DESCRIPTION || 'My awesome App'
+      //   }
+      // })
     ]
   }
 
@@ -209,8 +201,8 @@ module.exports = (
     config.plugins = [
       ...config.plugins,
       new ErrorOverlayPlugin(),
-      new webpack.HotModuleReplacementPlugin(),
-      new webpack.WatchIgnorePlugin([paths.appAssetsManifest])
+      new FriendlyErrorsWebpackPlugin(),
+      new webpack.HotModuleReplacementPlugin()
     ]
   }
 

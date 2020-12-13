@@ -1522,9 +1522,9 @@
   integrity sha512-tHq6qdbT9U1IRSGf14CL0pUlULksvY9OZ+5eEgl1N7t+OA3tGvNpxJCzuKQlsNgCVwbAs670L1vcVQi8j9HjnA==
 
 "@types/node@*":
-  version "14.14.12"
-  resolved "https://registry.yarnpkg.com/@types/node/-/node-14.14.12.tgz#0b1d86f8c40141091285dea02e4940df73bba43f"
-  integrity sha512-ASH8OPHMNlkdjrEdmoILmzFfsJICvhBsFfAum4aKZ/9U4B6M6tTmTPh+f3ttWdD74CEGV5XvXWkbyfSdXaTd7g==
+  version "14.14.13"
+  resolved "https://registry.yarnpkg.com/@types/node/-/node-14.14.13.tgz#9e425079799322113ae8477297ae6ef51b8e0cdf"
+  integrity sha512-vbxr0VZ8exFMMAjCW8rJwaya0dMCDyYW2ZRdTyjtrCvJoENMpdUHOT/eTzvgyA5ZnqRZ/sI0NwqAxNHKYokLJQ==
 
 "@types/parse-json@^4.0.0":
   version "4.0.0"
@@ -4972,7 +4972,7 @@ html-webpack-harddisk-plugin@^1.0.2:
   dependencies:
     mkdirp "^0.5.1"
 
-"html-webpack-plugin@>=4.0.0 || ^4.0.0-beta.11", html-webpack-plugin@^4.5.0:
+"html-webpack-plugin@>=4.0.0 || ^4.0.0-beta.11":
   version "4.5.0"
   resolved "https://registry.yarnpkg.com/html-webpack-plugin/-/html-webpack-plugin-4.5.0.tgz#625097650886b97ea5dae331c320e3238f6c121c"
   integrity sha512-MouoXEYSjTzCrjIxWwg8gxL5fE2X2WZJLmBYXlaJhQUH5K/b5OrqmV7T4dB7iu0xkmJ6JlUuV6fFVtnqbPopZw==
@@ -4986,6 +4986,18 @@ html-webpack-harddisk-plugin@^1.0.2:
     pretty-error "^2.1.1"
     tapable "^1.1.3"
     util.promisify "1.0.0"
+
+html-webpack-plugin@^5.0.0-alpha.15:
+  version "5.0.0-alpha.15"
+  resolved "https://registry.yarnpkg.com/html-webpack-plugin/-/html-webpack-plugin-5.0.0-alpha.15.tgz#4562c3afa9d79e2ee0cf0c8e1a43ed47487d6115"
+  integrity sha512-SFnpxiOo8EZ37fPUG4elnii78E7WBlv6pqJl0rwK5knWRpvzQbbPGmn/hNrnBvgPbKi5RHwoaEdsQkLvHk+AzA==
+  dependencies:
+    "@types/html-minifier-terser" "^5.0.0"
+    html-minifier-terser "^5.0.1"
+    loader-utils "2.0.0"
+    lodash "^4.17.20"
+    pretty-error "^2.1.1"
+    tapable "2.0.0"
 
 htmlparser2@^3.3.0:
   version "3.10.1"
@@ -9355,6 +9367,11 @@ tailwindcss@^2.0.2:
     pretty-hrtime "^1.0.3"
     reduce-css-calc "^2.1.6"
     resolve "^1.19.0"
+
+tapable@2.0.0:
+  version "2.0.0"
+  resolved "https://registry.yarnpkg.com/tapable/-/tapable-2.0.0.tgz#a49c3d6a8a2bb606e7db372b82904c970d537a08"
+  integrity sha512-bjzn0C0RWoffnNdTzNi7rNDhs1Zlwk2tRXgk8EiHKAOX1Mag3d6T0Y5zNa7l9CJ+EoUne/0UHdwS8tMbkh9zDg==
 
 tapable@^1.0.0, tapable@^1.1.3:
   version "1.1.3"
