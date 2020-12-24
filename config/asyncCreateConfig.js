@@ -1,5 +1,4 @@
 const paths = require('./paths')
-const devServer = require('./devServer')
 const webpack = require('webpack')
 const getClientEnv = require('./env').getClientEnv
 const AssetsPlugin = require('assets-webpack-plugin')
@@ -8,11 +7,8 @@ const ErrorOverlayPlugin = require('error-overlay-webpack-plugin')
 const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 const HtmlWebpackHarddiskPlugin = require('html-webpack-harddisk-plugin')
 const FriendlyErrorsWebpackPlugin = require('friendly-errors-webpack-plugin')
-// const FaviconsWebpackPlugin = require('favicons-webpack-plugin')
-// const CopyPlugin = require('copy-webpack-plugin')
 const TerserPlugin = require('terser-webpack-plugin')
 const CssMinimizerPlugin = require('css-minimizer-webpack-plugin')
-// const safePostCssParser = require('postcss-safe-parser')
 const posthtml = require('posthtml')
 
 const postcssOptions = {
@@ -27,9 +23,6 @@ const postcssOptions = {
       stage: 0
     }),
     require('postcss-flexbugs-fixes')
-    // require('cssnano')({
-    //   preset: 'default'
-    // })
   ]
 }
 
@@ -48,7 +41,7 @@ module.exports = (
     const dotenv = getClientEnv('web', { clearConsole, host, port })
 
     const config = {
-      stats: 'none',
+      stats: 'errors-only',
       cache: {
         type: 'filesystem',
         cacheDirectory: paths.appCache
@@ -181,15 +174,10 @@ module.exports = (
       },
 
       plugins: [
-        // new CopyPlugin({
-        //   patterns: [{ from: paths.appImagesSrc, to: paths.appImagesBuild }]
-        // }),
-
         new AssetsPlugin({
           path: paths.appBuild,
           filename: 'assets.json'
         }),
-        //   new webpack.ProgressPlugin(),
         new webpack.DefinePlugin(dotenv.stringified),
         new HtmlWebpackPlugin(
           Object.assign(
@@ -219,19 +207,10 @@ module.exports = (
           )
         ),
         new HtmlWebpackHarddiskPlugin()
-        // new FaviconsWebpackPlugin({
-        //   logo: paths.appFavicon,
-        //   prefix: 'images/assets',
-        //   favicons: {
-        //     appName: process.env.APP_NAME || 'my-app',
-        //     appDescription: process.env.APP_DESCRIPTION || 'My awesome App'
-        //   }
-        // })
       ]
     }
 
     if (IS_DEV) {
-      config.devServer = devServer
       config.plugins = [
         ...config.plugins,
         new ErrorOverlayPlugin(),

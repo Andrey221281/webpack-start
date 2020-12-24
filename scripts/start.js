@@ -27,23 +27,26 @@ const start = () => {
 
         const server = new DevServer(
           clientCompiler,
-          Object.assign(config.devServer, {
-            static: [paths.appPublic, paths.appImagesSrc],
-            transportMode: 'ws',
-            host: host,
-            port: port,
-            client: { progress: true },
-            overlay: false,
-            firewall: false,
-            headers: { 'Access-Control-Allow-Origin': '*' },
-            historyApiFallback: {
-              disableDotRule: true
-            },
-            compress: true,
-            liveReload: true,
-            injectClient: true,
-            injectHot: true
-          })
+          Object.assign(
+            {},
+            {
+              static: [paths.appPublic, paths.appImagesSrc],
+              transportMode: 'ws',
+              host: host,
+              port: port,
+              client: { progress: false },
+              overlay: false,
+              firewall: false,
+              headers: { 'Access-Control-Allow-Origin': '*' },
+              historyApiFallback: {
+                disableDotRule: true
+              },
+              compress: true,
+              liveReload: true,
+              injectClient: true,
+              injectHot: true
+            }
+          )
         )
         server.listen(port, host, (err) => {
           if (err) {

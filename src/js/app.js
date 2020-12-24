@@ -1,4 +1,5 @@
-import app from './app'
+import React from 'react'
 
-// app()
-console.log('1sdsds')
+export default function App(params) {
+  return <div>Ap</div>
+}
