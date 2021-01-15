@@ -8,7 +8,6 @@ import App from './js/app'
 render(<App />, document.getElementById('react-root'))
 
 if (module.hot) {
-  module.hot.accept(<App />, () =>
-    window.addEventListener('message', (e) => console.clear())
-  )
+  // console.clear()
+  module.hot.accept()
 }

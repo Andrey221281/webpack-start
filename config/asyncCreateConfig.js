@@ -41,7 +41,8 @@ module.exports = (
     const dotenv = getClientEnv('web', { clearConsole, host, port })
 
     const config = {
-      stats: 'errors-only',
+      stats: 'none',
+      bail: true,
       cache: {
         type: 'filesystem',
         cacheDirectory: paths.appCache

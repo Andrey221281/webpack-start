@@ -1,5 +1,6 @@
 import React from 'react'
 
 export default function App(params) {
-  return <div>Ap</div>
+  console.log('Hello console')
+  return <div>Hello react from jsx</div>
 }

@@ -31,7 +31,6 @@ const start = () => {
             {},
             {
               static: [paths.appPublic, paths.appImagesSrc],
-              transportMode: 'ws',
               host: host,
               port: port,
               client: { progress: false },
